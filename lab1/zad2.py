@@ -20,5 +20,4 @@ def BFS (graph,start,end):
 
 graph={
     "A":["B","C"],
-
 }
