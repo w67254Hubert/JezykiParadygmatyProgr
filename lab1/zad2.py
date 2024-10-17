@@ -19,5 +19,5 @@ def BFS (graph,start,end):
     return None #jeśli nie ma ścierzki
 
 graph={
-    "A":["B","C"],
+    "A":["B","C"],"B":["A"]
 }
