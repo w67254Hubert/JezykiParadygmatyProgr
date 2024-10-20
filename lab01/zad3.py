@@ -1,5 +1,11 @@
 
 import random
+#podejscie proceduralne?
+
+#program tworzy liste zadań
+#następnie segreguje zadania na podstawie zalarzności czas / nagroda
+#liczy czas na wykonanie zadań z listy
+#funkcja licząca czas w którym zostaną rozpoczęte zadania
 
 #zadanie,czas wykonania, nagroda
 #tasks=[["zadanie A",1,100],["zadanie B",2,30],["zadanie C",3,100],["zadanie D",2,50]]
@@ -22,7 +28,7 @@ def DoTaskList(listlen):
     return taskList
 
 def rewardToTime(task):
-    return task[1] / task[2] #dzielenie czasu przez nagrodę wynik
+    return task[1] / task[2] #dzielenie czasu przez nagrodę by wybrać optymalniejsze zadania
 
 def sortTaskList(taskList):
     # Sortuj według stosunku nagroda/czas, w kolejności malejącej
@@ -73,8 +79,3 @@ print(taskstartTime)
 totalTime=totalWaitingTime(taskList)
 print(f'Całkowity czas na wykonanie zadań wynosi {totalTime} min')
 
-#program tworzy liste zadań
-#następnie segreguje zadania na podstawie zalarzności czas / nagroda
-#liczy czas na wykonanie zadań z listy
-
-#funkcja licząca czas w którym zostaną rozpoczęte zadania
