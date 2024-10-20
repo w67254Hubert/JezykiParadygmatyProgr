@@ -19,5 +19,12 @@ def BFS (graph,start,end):
     return None #jeśli nie ma ścierzki
 
 graph={
-    "A":["B","C"],"B":["A"]
+    "A":["B","C"],"B":["A"],"C":["A","D"],"D":["C"],"E":[]
 }
+start='A'
+end='E'
+
+path=BFS(graph,start,end)
+if path == None:
+    print("nie ma połączenia mięcy wieszchołkiem początkowym a końcowym")
+else: print(f'najkrutsza scierzka od {start} do {end} to {path}')
