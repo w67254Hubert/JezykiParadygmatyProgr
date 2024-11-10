@@ -1,0 +1,10 @@
+Harmonogramowanie zadań z algorytmem EDF (Earliest Deadline First)
+• Opis: Implementacja algorytmu EDF, który przydziela zadania z uwzględnieniem ich
+ostatecznych terminów (deadlines). Zadania z najbliższymi terminami są realizowane
+w pierwszej kolejności, co pozwala na minimalizację ryzyka przekroczenia deadline'ów.
+• Zakres: Harmonogramowanie z ograniczeniami czasowymi, algorytmy priorytetowe.
+• Techniki: Praca z terminami, kolejki priorytetowe.
+
+pomysł na to dane wejściowe np. z csv (można stworzyć interfejs do ich tworzenia)
+wrzucasz do programu szacującego dedline
+wypluwa on wyniki i zapisuje np. do csv
