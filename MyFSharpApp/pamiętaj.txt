@@ -1,3 +1,0 @@
-cd C:\Users\hubla\Documents\studia-pliki\repozytoria\JezykiParadygmatyProgr\MyFSharpApp
-dotnet run 
-tak odpalasz plik program 
