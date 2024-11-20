@@ -1,4 +1,4 @@
-﻿open System
+open System
 
 // Funkcja do znajdowania najdłuższego słowa
 let najdluzszeSlowo (tekst: string) =
