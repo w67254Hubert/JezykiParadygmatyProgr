@@ -1,5 +1,7 @@
-﻿module zad2
+module zad2
 open System
+//przerobiony kod z python działa
+
 let partition (array: int[]) low high =
     let pivot = array.[high]
     let mutable i = low - 1
