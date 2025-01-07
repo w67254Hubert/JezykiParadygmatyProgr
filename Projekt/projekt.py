@@ -133,3 +133,5 @@ while True:
             case _:
                 print("Nieprawidłowy wybór. Spróbuj ponownie.")
 #sprawdź pierwsze zadania tak by nie miesciło się w wyznaczonym terminie dla siebie i czy sie nie zwali reszta
+#dodaj edycjeę rekordów z zrobionego pliku
+#załatw by można było sortować posortowane (chyba tylko potrzeba czasu trfania)
