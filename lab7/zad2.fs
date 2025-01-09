@@ -29,11 +29,11 @@ type Bank() =
 
     member this.CreateAccount(accountNumber: string, initialBalance: float) =
         if accounts.ContainsKey(accountNumber) then
-            failwith "konto o podanym numerze już istnieje."//nie wiem jak inaczej ma to działać
+             failwith "konto o podanym numerze już istnieje."//nie wiem jak inaczej ma to działać
         else
             let newAccount = BankAccount(accountNumber, initialBalance)
             accounts.Add(accountNumber, newAccount)
-            newAccount
+            newAccount//zwracana klasa bankAccount 
 
     member this.GetAccount(accountNumber: string) =
         if accounts.ContainsKey(accountNumber) then
@@ -67,28 +67,30 @@ type Bank() =
 // Program główny
 [<EntryPoint>]
 let main argv =
-//  tworzenie banku
     let bank = Bank()
-//tworzenie kont w banku
+    // Tworzenie kont
     let account1 = bank.CreateAccount("123456", 1000.0)
     let account2 = bank.CreateAccount("789012", 2000.0)
     printfn "\nsprawdzenie utworzonych kont"
     bank.CheckAccount("123456")
     bank.CheckAccount("789012")
-
+    // Wpłata na konto
     printfn "\nWpłata 500 PLN na konto 123456:"
     account1.Deposit(500.0)
     bank.CheckAccount("123456")
 
+    // Wypłata z konta
     printfn "\nWypłata 300 PLN z konta 789012:"
     account2.Withdraw(300.0)
     bank.CheckAccount("789012")
 
 
+    // Aktualizacja konta
     printfn "\nAktualizacja salda konta 123456 do 2500 PLN:"
     bank.UpdateAccount("123456",2500.0)
     bank.CheckAccount("123456")
 
+    // Usunięcie konta
     printfn "\nUsunięcie konta 789012:"
     bank.DeleteAccount("789012")
 

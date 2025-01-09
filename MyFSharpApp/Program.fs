@@ -29,11 +29,11 @@ type Bank() =
 
     member this.CreateAccount(accountNumber: string, initialBalance: float) =
         if accounts.ContainsKey(accountNumber) then
-            failwith "konto o podanym numerze już istnieje."//nie wiem jak inaczej ma to działać
+             failwith "konto o podanym numerze już istnieje."//nie wiem jak inaczej ma to działać
         else
             let newAccount = BankAccount(accountNumber, initialBalance)
             accounts.Add(accountNumber, newAccount)
-            newAccount
+            newAccount//zwracana klasa bankAccount 
 
     member this.GetAccount(accountNumber: string) =
         if accounts.ContainsKey(accountNumber) then
