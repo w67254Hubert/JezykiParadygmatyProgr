@@ -1,0 +1,1 @@
+//Napisz funkcję, która odwraca kolejność elementów listy.

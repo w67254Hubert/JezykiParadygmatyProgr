@@ -1,4 +1,4 @@
-﻿open System
+open System
 open System.Collections.Generic
 
 // Definicja listy łączonej
@@ -14,31 +14,36 @@ let rec printList list =
         printf "%A " value
         printList next
 
-//zadanie 1 Napisz funkcję, która tworzy listę łączoną na podstawie zwykłej listy (List<'T>)
 let rec fromList lst =
     match lst with 
     | [] -> Empty
     | head :: tail -> Node(head, fromList tail)
-//zadanie 2 Napisz funkcję, która sumuje elementy listy zawierającej liczby całkowite.
-let rec countRepets element list = 
-    match list with 
-    | Empty -> 0 
+ 
+
+//zadanie 5 Napisz funkcję, która sprawdza, czy dany element znajduje się w liście.
+let rec findInList element list  =
+    match list with
+    | Empty -> false
     | Node(value, next) ->
-        let count = if value = element then 1 else 0
-        count + countRepets element next
-// Przykład użycia
+        if value = element then true
+        else findInList element next
+
 [<EntryPoint>]
 let main argv =
-    //zad 1
-    let Lista = [1; 2; 3; 4; 5;3]
+
+    let Lista = [1; 2; 3; 4; 5]
     let linkedList= fromList Lista
     printList linkedList
 
-    //zad2
-    let element =3
-    let rep=countRepets element linkedList
-    printf"\n numer %i powtóżył się %i " element rep
+//zad5
+    let element=5
+    let found= findInList element linkedList
+    printf"\nczy %i jest w liście? %b" element found
 
-    System.Console.ReadLine() |> ignore
+    let element=9
+    let found= findInList element linkedList
+    printf"\nczy %i jest w liście? %b" element found
+
+    System.Console.ReadLine()
 
     0

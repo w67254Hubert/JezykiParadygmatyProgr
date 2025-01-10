@@ -48,7 +48,8 @@ type Bank() =
             account.Deposit(difference)
         else
             account.Withdraw(-difference)
-        
+        //ta funkcja powinna być chyba odpowiedzialna za pośredniczenie w tranzakcjach konta
+        //a niekoniecznie działać jako nadpisanie salda ;/
 
     member this.DeleteAccount(accountNumber: string) =
         let removed = accounts.Remove(accountNumber)

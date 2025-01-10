@@ -1,4 +1,4 @@
-﻿open System
+open System
 open System.Collections.Generic
 
 // Definicja listy łączonej
@@ -14,31 +14,30 @@ let rec printList list =
         printf "%A " value
         printList next
 
+
+
 //zadanie 1 Napisz funkcję, która tworzy listę łączoną na podstawie zwykłej listy (List<'T>)
 let rec fromList lst =
     match lst with 
     | [] -> Empty
     | head :: tail -> Node(head, fromList tail)
 //zadanie 2 Napisz funkcję, która sumuje elementy listy zawierającej liczby całkowite.
-let rec countRepets element list = 
-    match list with 
-    | Empty -> 0 
+let rec sumList list =
+    match list with
+    | Empty -> 0
     | Node(value, next) ->
-        let count = if value = element then 1 else 0
-        count + countRepets element next
+        value + sumList next //sumoje wartości wywołując rekuręcyjnie siebie
 // Przykład użycia
 [<EntryPoint>]
 let main argv =
     //zad 1
-    let Lista = [1; 2; 3; 4; 5;3]
+    let Lista = [1; 2; 3; 4; 5]
     let linkedList= fromList Lista
     printList linkedList
 
     //zad2
-    let element =3
-    let rep=countRepets element linkedList
-    printf"\n numer %i powtóżył się %i " element rep
-
-    System.Console.ReadLine() |> ignore
+    let sum=sumList linkedList
+    printf"suma listy łączonej to: %i " sum
+    System.Console.ReadLine()
 
     0
