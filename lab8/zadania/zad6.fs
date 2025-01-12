@@ -44,7 +44,7 @@ let main argv =
     let linkedList= fromList Lista
     printList linkedList
 
-//zad5
+//zad6
     let element: int=5
     
     let index: int= findIndex element linkedList
