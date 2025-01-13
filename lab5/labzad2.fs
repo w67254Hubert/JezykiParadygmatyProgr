@@ -1,16 +1,19 @@
-﻿//for i =1 to 5 do
-//printfn "wartość i = %d" i
+﻿// // Przykład funkcji iteracyjnej (sumowanie liczb od 1 do n):
+iteracyjnie 
+let sumIter n =
+let mutable sum = 0
+for i in 1 .. n do
+sum <- sum + i
+sum
 
-//for i =1 downto 5 do
-//printfn "wartość i = %d" i
-
+// Przykład funkcji rekurencyjnej (sumowanie liczb od 1 do n):
 //rekurencja
 
 let rec sumRec n=
     if n <=0 then 0
     else n+ sumRec(n-1)
 
-
+sumrec
 //rekurencyjna suma ogonowa
 
 let sumaTail n=

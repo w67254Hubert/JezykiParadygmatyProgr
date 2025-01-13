@@ -9,12 +9,14 @@ let KalkulujBMI(user: User) =
     let bmi = user.Weight / (HeightMeters ** 2)
     bmi
 
-let getBMICat bmi=
-    match bmi with
-    | x when x < 16.0 ->"niedowaga"
-    | x when x <= 18.5 && x<24.99 ->"prawidłowa"
-    | x when x > 25.0 ->"nadwaga"
-    | _ ->"popsułeś licznenie"
+let getBMICat bmi =
+    match bmi with 
+    | x when x < 16.0 -> "niedowaga" 
+    | x when x >= 16.0 && x <= 18.5 -> "niedowaga" 
+    | x when x > 18.5 && x <= 24.99 -> "prawidłowa" 
+    | x when x >= 25.0 && x <= 29.99 -> "nadwaga" 
+    | x when x >= 30.0 -> "otyłość"
+    | _ -> "popsułeś licznenie"
 
 //let main (argv: 'a)=
 printf "podaj wagę w kg"
@@ -35,5 +37,9 @@ if wheightinputFloat >0.0 && heightinputFloat>0.0 then
     printfn "Kategoria BMI: %s" category
 else
     printf "Wprowadzone dane są niepoprawne."
+
+let List = [1;2;3;4;5]
+
 0
 //musiałem wyrzucić [<EntryPoint>] i funkcję main poniewarz nie jest ona obsługiwana w fsx
+

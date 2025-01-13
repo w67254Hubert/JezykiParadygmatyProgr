@@ -8,6 +8,7 @@ let rec fibonachi n=
     if n<=1 then n
     else fibonachi(n-1) + fibonachi(n-2)
 
+
 let wynik = fibonachi 4
 printf "rek fib z 4: %d" wynik
 
