@@ -1,6 +1,7 @@
 import csv
-from queue import PriorityQueue
+import heapq
 from datetime import datetime, timedelta
+import os
 
 # Funkcja do odczytu danych z pliku CSV
 def ReadCSV(scieszka):
@@ -37,21 +38,31 @@ def zapHarmonogramDoCSV(harmonogram, outPlik):
 
 # Implementacja algorytmu EDF
 def edfHarmonogramr(zadania):
-    zadania.sort(key=lambda zad: zad['deadline']) #sortowanie kolejności wedłóg deadline
 
-
+    PriorityQueue = []
+    for zad in zadania: 
+        #tworzenie kolejki pryjoretytowej gdzie priorytet zależy od bliskości dedline
+        heapq.heappush(PriorityQueue, (zad['deadline'], zad))
+        
     harmonogram = []
     czasTeraz = datetime.now() #tada czasu z pc np: 2025-01-06 14:35:22
     # czasTeraz = datetime(2025, 1, 6, 14, 35, 22) #dla testu "zatrzymanie czasu"
 
-    for zad in zadania:
+    while PriorityQueue:
+        deadline, zad = heapq.heappop(PriorityQueue)  # Pobranie zadania z najbliższym deadline
+        czasDelta=timedelta(minutes=zad['czasTrwania'])
+        #sprawdza najpuźniejszy czas rozpoczęcia zadania jeśli czas jest wcześniejszy niż teraz to daje teraz
+        if czasTeraz > zad['deadline'] - czasDelta :
+            startZad = czasTeraz
+        else:
+            startZad = zad['deadline'] - czasDelta
 
-        startZad = max(czasTeraz, zad['deadline'] - timedelta(minutes=zad['czasTrwania']))
-        koniecZad = startZad + timedelta(minutes=zad['czasTrwania'])
+        koniecZad = startZad + czasDelta
+                
 
-        if koniecZad <= zad['deadline']:
-            status = 'Na czas'
-        else: status = 'nie na czas'
+        if koniecZad <= zad['deadline']: 
+            status = 'Na czas' 
+        else: status = 'nie na czas' 
 
         harmonogram.append({
             'id': zad['id'],
@@ -66,42 +77,70 @@ def edfHarmonogramr(zadania):
 
     return harmonogram
 
-# Przykładowy interfejs do tworzenia danych wejściowych
-def noweZadaniaDoCSV(scieszka):#wprować pędle by było prościej poprawić wprowadzane wartości
+# Tworzenie pliku csv z zadaniami
+def noweZadaniaDoCSV(scieszka):
     nazwyKolumn = ['id', 'nazwa', 'deadline', 'czasTrwania']
-    with open(scieszka, mode='w', newline='') as plik:
+    plikIstnieje = os.path.exists(sciezka)
+    #sprawdzanie czy istnieje i czy jest pusty i przybpisanie boola do zmiennej plikPusty
+    plikPusty= not plikIstnieje or os.stat(sciezka).st_size == 0 
+    
+    with open(scieszka, mode='a', newline='') as plik:
         zapis = csv.DictWriter(plik, fieldnames=nazwyKolumn)
-        zapis.writeheader()
-        print("Podaj dane dla zadań (wpisz 'koniec' aby zakończyć):")
-        zadID = 1
-        while True:
 
+        if plikPusty: #kiedy pusty plik zapisz
+            zapis.writeheader()
+        zadID = 1
+        #kiedy nie jest pusty zwiększ zadID wedlug ilości wierszy
+        if not plikPusty: 
+            with open(sciezka, mode='r') as plikDoOdczytu:
+                odczyt = csv.DictReader(plikDoOdczytu)
+                for wiersz in odczyt:
+                    zadID=int(wiersz['id']) + 1
+
+        print("Podaj dane dla zadań (wpisz 'koniec' aby zakończyć):")
+
+        #pętla pobierająca dane od urzytkownika i zapusująca je
+        while True:
             nazwa = input(f"Nazwa zadania {zadID}: ").strip()
             if nazwa.lower() == 'koniec':
                 break
             if not nazwa:
-                    raise ValueError("Nazwa zadania nie może być pusta.")
-            
-            deadline = input(f"Dedline (format: YYYY-MM-DD HH:MM:SS): ").strip()
-            try:
-                deadlineTest = datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S")
-            except ValueError:
-                raise ValueError("Niepoprawny format daty. Użyj formatu: YYYY-MM-DD HH:MM:SS.")
-            
-            czasTrwania =input(f"Czas trwania (w minutach): ").strip()
-            if not czasTrwania.isdigit() or int(czasTrwania) <= 0:
-                raise ValueError("Czas trwania musi być liczbą całkowitą większą od zera.")
-            czasTrwania = int(czasTrwania)
+                    print("Nazwa 1zadania nie może być pusta.")
+                    continue 
+            while True:
+                deadline = input(f"Dedline (format: YYYY-MM-DD HH:MM:SS): ").strip()
+
+                try:
+                    #konwersja na chcianhy typ aby sprawdzić czy wpisanio poprawny format deadline
+                    deadlineTest = datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S")
+                    if deadlineTest >= datetime.now():
+                        break
+                    else:
+                        print("Dedline na zadanie już się skończył")
+                except ValueError:
+                    print("Niepoprawny format daty.")
+                    
+            while True:
+                czasTrwania =input(f"Czas trwania (w minutach): ").strip()
+                try:
+                    if czasTrwania.isdigit() and (int(czasTrwania) > 0):
+                        czasTrwania = int(czasTrwania)
+                        break
+                    else: 
+                        print("Czas trwania musi liczbą większą od zera.")
+                except ValueError:
+                    print("Czas trwania musi być liczbą całkowitą")
+
             zapis.writerow({
                 'id': zadID,
                 'nazwa': nazwa,
                 'deadline': deadline,
                 'czasTrwania': czasTrwania
             })
-            zadID += 1
+            zadID += 1 
 
 while True:
-        print("1. Stwórz plik CSV z zadaniami")
+        print("1. Stwórz plik CSV z zadaniami lub Dopisz zadania do pliku")
         print("2. Wykonaj harmonogram EDF")
         print("3. Wyjście")
 
@@ -109,29 +148,40 @@ while True:
 
         match wyb:
             case '1':
-                sciezka = input("Podaj nazwę pliku CSV do utworzenia (zad.csv): ")
-                if not sciezka:
-                    raise ValueError("Nazwa pliku nie może być pusta.")
+                while True:
+                    sciezka = input("Podaj nazwę pliku CSV do utworzenia (zad.csv): ")
+                    if not sciezka:
+                        print("Nazwa pliku nie może być pusta.")
+                    elif not sciezka.endswith(".csv"):
+                        print("Nazwa pliku musi kończyć się na '.csv'.")
+                    else: 
+                        break
                 noweZadaniaDoCSV(sciezka)
+
             case '2':
-                inputplik = input("Podaj nazwę pliku CSV z zadaniami (zad.csv): ")
-                if not inputplik:
-                    raise ValueError("Nazwa pliku z zadaniami nie może być pusta.")
-                
-                outputplik = input("Podaj nazwę pliku CSV do zapisu wyników (chedule.csv): ")
-                if not outputplik:
-                    raise ValueError("Nazwa pliku do zapisu nie może być pusta.")
+                while True:
+                    inputplik = input("Podaj nazwę pliku CSV z zadaniami (zad.csv): ")
+                    if not os.path.exists(inputplik):
+                        print("Plik o podanej nazwie nie istnieje.")
+                    else: break
+
+                while True:
+                    outputplik = input("Podaj nazwę pliku CSV do zapisu wyników (harm.csv):")
+                    if not outputplik:
+                        print("Nazwa pliku nie może być pusta.")
+                    elif not outputplik.endswith(".csv"):
+                        print("Nazwa pliku musi kończyć się na '.csv'.")
+                    else:
+                        break
 
                 zadania = ReadCSV(inputplik)
+                print(f"pobrano dane z pliku {inputplik}")
                 harmonogram = edfHarmonogramr(zadania)
                 zapHarmonogramDoCSV(harmonogram, outputplik)
  
-                print(f"Harmonogram zapisany w pliku {inputplik}")
+                print(f"Harmonogram zapisany w pliku {outputplik}")
             case '3':
                 print("Koniec programu.")
                 break
             case _:
                 print("Nieprawidłowy wybór. Spróbuj ponownie.")
-#sprawdź pierwsze zadania tak by nie miesciło się w wyznaczonym terminie dla siebie i czy sie nie zwali reszta
-#dodaj edycjeę rekordów z zrobionego pliku
-#załatw by można było sortować posortowane (chyba tylko potrzeba czasu trfania)
